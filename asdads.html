@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Love</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #ff2a22;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #yes {
+            background-color: #ff2a22;
+            color: white;
+            border-radius: 5px;
+        }
+
+        #yes:hover {
+            transform: scale(1.2);
+        }
+
+        #no {
+            background-color: #ccc;
+            color: black;
+            border-radius: 5px;
+            position: absolute;
+        }
+
+        .love-letter {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+            margin-top: 20px;
+            font-size: 20px;
+            color: #ff2a22;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+            display: none;
+            font-size: 24px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Will you be my Valentine?</h1>
+        <div class="buttons">
+            <button id="yes">Yes</button>
+            <button id="no">No</button>
+        </div>
+        <div class="love-letter">❤️ Yay! You said yes! I love you! ❤️</div>
+    </div>
+    <div class="confetti"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const noButton = document.getElementById("no");
+            const yesButton = document.getElementById("yes");
+            const loveLetter = document.querySelector(".love-letter");
+            const confettiContainer = document.querySelector(".confetti");
+
+            document.addEventListener("mousemove", function (event) {
+                const rect = noButton.getBoundingClientRect();
+                const distance = Math.hypot(event.clientX - (rect.left + rect.width / 2), event.clientY - (rect.top + rect.height / 2));
+                if (distance < 50) {
+                    const offsetX = (Math.random() * 200) - 100;
+                    const offsetY = (Math.random() * 200) - 100;
+                    noButton.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                }
+            });
+
+            yesButton.addEventListener("click", function () {
+                loveLetter.style.display = "block";
+                yesButton.style.display = "none";
+                noButton.style.display = "none";
+                startHeartConfetti();
+            });
+
+            function startHeartConfetti() {
+                confettiContainer.style.display = "block";
+                confettiContainer.innerHTML = "";
+                for (let i = 0; i < 50; i++) {
+                    let heart = document.createElement("div");
+                    heart.innerHTML = "❤️";
+                    heart.style.position = "absolute";
+                    heart.style.left = Math.random() * window.innerWidth + "px";
+                    heart.style.top = Math.random() * window.innerHeight + "px";
+                    heart.style.fontSize = Math.random() * 24 + 12 + "px";
+                    heart.style.opacity = Math.random();
+                    heart.style.transition = "transform 3s ease-in, opacity 3s ease-in";
+                    confettiContainer.appendChild(heart);
+                    setTimeout(() => {
+                        heart.style.transform = "translateY(100vh)";
+                        heart.style.opacity = "0";
+                    }, 100);
+                    setTimeout(() => heart.remove(), 3000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
